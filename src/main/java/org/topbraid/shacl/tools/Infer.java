@@ -65,6 +65,8 @@ public class Infer extends AbstractTool {
         do {
             // execute the rules
             Model newResults = RuleUtil.executeRules(dataModel, shapesModel, null, null);
+            // record size before adding newResults so we can detect fixpoint
+            long sizeBefore = results == null ? 0 : results.size();
             // if this is the first iteration, set the results model, otherwise add to it
             if (results == null) {
                 results = newResults;
@@ -75,9 +77,9 @@ public class Infer extends AbstractTool {
             if (newResults.isEmpty()) {
                 break;
             }
-            // if the size of the allResults model did not increase, break
-            // (this means that the new results were already in the allResults model)
-            if (results.size() == newResults.size()) {
+            // if the size of the results model did not increase, break
+            // (this means that the new results were already in the results model)
+            if (results.size() == sizeBefore) {
                 break;
             }
 
